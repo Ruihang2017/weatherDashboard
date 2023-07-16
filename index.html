@@ -25,19 +25,16 @@
     <main>
         <div class="container text-center">
             <div class="row">
-                <div class="col-4" style="background-color: red;">
+                <div class="col-4">
                     <h2 class="text-start">Search for a city:</h2>
-                    <form id="searchForm" class="d-flex" role="search">
+                    <form id="searchForm" class="d-flex pb-4" role="search">
                         <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
                         <button class="btn btn-outline-success" type="submit">Search</button>
                     </form>
-                    <div class="btn-group-vertical w-100" role="group" aria-label="Vertical button group">
-                        <button type="button" class="btn btn-primary">Button</button>
-                        <button type="button" class="btn btn-primary">Button</button>
-
+                    <div id="btnGroup" class="btn-group-vertical w-100" role="group" aria-label="Vertical button group">
                     </div>
                 </div>
-                <div class="col-8" style="background-color: aqua;">
+                <div class="col-8">
                     <div class="text-start">
                         <h2 id="currentLocation">Location</h2>
                         <div id="currentDate">Date</div>

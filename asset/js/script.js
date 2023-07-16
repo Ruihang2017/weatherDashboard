@@ -8,6 +8,9 @@ let currentWind = document.getElementById("currentWind");
 let currentHumid = document.getElementById("currentHumid");
 let forecastDays = document.getElementById("forecastDays");
 let currentIcon = document.getElementById("currentIcon");
+let btnGroup = document.getElementById("btnGroup");
+
+let searchHistory = [];
 
 let weatherData = {
     location: "location",
@@ -95,6 +98,9 @@ const getWeatherAPI = (lat, lon) => {
                     });
                     console.log(weatherData);
                     displayWeatherAPIData();
+                    searchHistory.push(weatherData);
+                    localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
+
                 });
             } else {
                 alert('Error: ' + response.statusText);
@@ -129,5 +135,33 @@ const displayWeatherAPIData = () => {
 }
 
 
-// getWeatherAPI();
-getWeatherAPIFromSearch("Sydney");
+const loadSearchHistory = () => {
+    searchHistory.forEach(data => {
+        btnGroup.innerHTML += `<button type="button" class="btn btn-primary">${data.location}</button>`
+    });
+}
+
+
+//---------------- init -----------------
+
+let siteLocation = "";
+const init = () => {
+
+    // get the local search history
+    searchHistory = localStorage.getItem("searchHistory");
+
+    if (!searchHistory) {
+        searchHistory = [];
+    } else {
+        searchHistory = JSON.parse(searchHistory);
+        loadSearchHistory();
+
+    }
+
+    // getWeatherAPI();
+    getWeatherAPIFromSearch("Sydney");
+
+}
+
+
+init();
