@@ -1,17 +1,12 @@
 const appid = "0f6b26473e144361f9f4478387b457f2";
 
-
+let searchForm = document.getElementById('searchForm');
 let currentLocation = document.getElementById("currentLocation");
 let currentDate = document.getElementById("currentDate");
 let currentTemp = document.getElementById("currentTemp");
 let currentWind = document.getElementById("currentWind");
 let currentHumid = document.getElementById("currentHumid");
 let forecastDays = document.getElementById("forecastDays");
-
-
-// let lat = 44.34;
-// let lon = 10.99;
-// let url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${appid}`;
 
 let weatherData = {
     location: "location",
@@ -25,11 +20,37 @@ let weatherData = {
     forecastWeather: []
 };
 
+// get the location based on the search input
+const getWeatherAPIFromSearch = (searchData) => {
+    const limit = 5;
+    let url = `http://api.openweathermap.org/geo/1.0/direct?q=${searchData}&limit=${limit}&appid=${appid}`;
+    fetch(url).then(response => {
+        if (response.ok) {
+            response.json().then(data => {
+                getWeatherAPI(data[0].lat, data[0].lon);
+            })
+        } else {
+            alert('Error: ', response.statusText);
+        }
+    }).catch(err => {
+        alert(`Unable to connect: ${err}`)
+    });
+}
 
-const getWeatherAPI = () => {
+// add the event listener
+searchForm.addEventListener('submit', (event) => {
+    event.preventDefault();
 
-    let lat = 44.34;
-    let lon = 10.99;
+    const input = searchForm.querySelector('input[type="search"]');
+    const searchValue = input.value;
+
+    getWeatherAPIFromSearch(searchValue);
+});
+
+
+// get weather data based on the search coordinate
+const getWeatherAPI = (lat, lon) => {
+
     let url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${appid}`;
     const forecastNum = 5;
 
@@ -83,13 +104,15 @@ const getWeatherAPI = () => {
         });
 };
 
+
+// display weather data
 const displayWeatherAPIData = () => {
     currentLocation.innerHTML = weatherData.location;
     currentDate.innerHTML = weatherData.currentWeather.date;
     currentTemp.innerHTML = weatherData.currentWeather.temp;
     currentWind.innerHTML = weatherData.currentWeather.wind;
     currentHumid.innerHTML = weatherData.currentWeather.humid;
-
+    forecastDays.innerHTML = [];
     weatherData.forecastWeather.forEach(forecast => {
         forecastDays.innerHTML += `
             <div class="col-sm-4 col-md-3 col-lg-2">
@@ -103,5 +126,5 @@ const displayWeatherAPIData = () => {
 }
 
 
-getWeatherAPI();
-
+// getWeatherAPI();
+getWeatherAPIFromSearch("Sydney");
