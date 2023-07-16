@@ -7,6 +7,7 @@ let currentTemp = document.getElementById("currentTemp");
 let currentWind = document.getElementById("currentWind");
 let currentHumid = document.getElementById("currentHumid");
 let forecastDays = document.getElementById("forecastDays");
+let currentIcon = document.getElementById("currentIcon");
 
 let weatherData = {
     location: "location",
@@ -65,13 +66,13 @@ const getWeatherAPI = (lat, lon) => {
                     weatherData.currentWeather.temp = `Temp: ${Math.floor(data.list[0].main.temp - 273.15)} &#8451;`;
                     weatherData.currentWeather.wind = `Wind: ${data.list[0].wind.speed} m/s;`;
                     weatherData.currentWeather.humid = `Humidity: ${data.list[0].main.humidity} %;`;
+                    weatherData.currentWeather.icon = `http://openweathermap.org/img/wn/${data.list[0].weather[0].icon}.png`;
 
                     console.log(data);
-
+                    console.log(data.list[0].weather[0].icon);
                     data.list.forEach(element => {
                         let date = new Date(element.dt * 1000)
                         let dateString = `${date.getDate()} - ${date.getMonth()}`;
-                        console.log(dateString);
 
                         // push the forecast data into the array
                         if (currentDate.getDate() !== date.getDate()) {
@@ -82,7 +83,7 @@ const getWeatherAPI = (lat, lon) => {
                             if (!overlap) {
                                 let forecast = {
                                     date: dateString,
-                                    icon: "icon",
+                                    icon: `http://openweathermap.org/img/wn/${element.weather[0].icon}.png`,
                                     temp: `Temp: ${Math.floor(element.main.temp - 273.15)} &#8451;`,
                                     wind: `Wind: ${element.wind.speed} m/s;`,
                                     humid: `Humidity: ${element.main.humidity} %;`
@@ -112,12 +113,14 @@ const displayWeatherAPIData = () => {
     currentTemp.innerHTML = weatherData.currentWeather.temp;
     currentWind.innerHTML = weatherData.currentWeather.wind;
     currentHumid.innerHTML = weatherData.currentWeather.humid;
+    currentIcon.setAttribute("src", weatherData.currentWeather.icon);
     forecastDays.innerHTML = [];
+
     weatherData.forecastWeather.forEach(forecast => {
         forecastDays.innerHTML += `
             <div class="col-sm-4 col-md-3 col-lg-2">
             <h4>${forecast.date}</h4>
-            <i class="bi bi-brightness-high text-warning"></i>
+            <img src="${forecast.icon}" alt="Weather Icon">
             <div>${forecast.temp}</div>
             <div>${forecast.wind}</div>
             <div>${forecast.humid}</div>
