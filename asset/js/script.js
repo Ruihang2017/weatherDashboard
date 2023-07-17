@@ -27,7 +27,7 @@ let weatherData = {
 // get the location based on the search input
 const getWeatherAPIFromSearch = (searchData) => {
     const limit = 5;
-    let url = `http://api.openweathermap.org/geo/1.0/direct?q=${searchData}&limit=${limit}&appid=${appid}`;
+    let url = `https://api.openweathermap.org/geo/1.0/direct?q=${searchData}&limit=${limit}&appid=${appid}`;
     fetch(url).then(response => {
         if (response.ok) {
             response.json().then(data => {
