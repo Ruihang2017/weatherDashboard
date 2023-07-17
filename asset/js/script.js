@@ -149,8 +149,9 @@ const loadSearchHistory = () => {
     let searchHistory = localStorage.getItem("searchHistory");
     if (!searchHistory) {
         searchHistory = [];
+    } else {
+        searchHistory = JSON.parse(searchHistory);
     }
-    searchHistory = JSON.parse(searchHistory);
     searchHistory.forEach(data => {
         btnGroup.innerHTML += `<button type="button" class="locationBtn btn btn-primary">${data.location}</button>`
     });
@@ -170,8 +171,9 @@ const addSearchHistory = (data) => {
     let searchHistory = localStorage.getItem("searchHistory");
     if (!searchHistory) {
         searchHistory = [];
+    } else {
+        searchHistory = JSON.parse(searchHistory);
     }
-    searchHistory = JSON.parse(searchHistory);
 
     // avoid repeat destination data in the localStorage
     let isDuplicate = searchHistory.some((history) => {
