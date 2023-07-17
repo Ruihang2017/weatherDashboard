@@ -173,9 +173,18 @@ const addSearchHistory = (data) => {
         searchHistory = [];
     }
     searchHistory = JSON.parse(searchHistory);
+
+    // avoid repeat destination data in the localStorage
+    let isDuplicate = searchHistory.some((history) => {
+        return history.location === data.location;
+    });
+    if (isDuplicate) {
+        return;
+    }
+
+    // add new data to the searchHistory 
     searchHistory.push(data);
     localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
-
     loadSearchHistory();
 }
 
@@ -190,16 +199,16 @@ const clearSearchHistory = () => {
 let siteLocation = "";
 const init = () => {
 
-    // get the local search history
-    searchHistory = localStorage.getItem("searchHistory");
+    // // get the local search history
+    // searchHistory = localStorage.getItem("searchHistory");
 
-    if (!searchHistory) {
-        searchHistory = [];
-    } else {
-        searchHistory = JSON.parse(searchHistory);
-        loadSearchHistory();
+    // if (!searchHistory) {
+    //     searchHistory = [];
+    // } else {
+    //     searchHistory = JSON.parse(searchHistory);
+    //     loadSearchHistory();
 
-    }
+    // }
 
     // getWeatherAPI();
     getWeatherAPIFromSearch("Sydney");
