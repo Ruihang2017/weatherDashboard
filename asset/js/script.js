@@ -10,7 +10,7 @@ let forecastDays = document.getElementById("forecastDays");
 let currentIcon = document.getElementById("currentIcon");
 let btnGroup = document.getElementById("btnGroup");
 
-let searchHistory = [];
+// let searchHistory = [];
 
 let weatherData = {
     location: "location",
@@ -49,9 +49,10 @@ searchForm.addEventListener('submit', (event) => {
     // on clear
     // clear the button list and the searchHistory inside localstorage 
     if (event.submitter.getAttribute("type") === "clear") {
-        searchHistory = [];
-        localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
-        loadSearchHistory();
+        // searchHistory = [];
+        // localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
+        // loadSearchHistory();
+        clearSearchHistory();
         return;
     }
 
@@ -108,13 +109,13 @@ const getWeatherAPI = (lat, lon) => {
                         }
 
                     });
-                    console.log(searchHistory);
+                    // console.log(searchHistory);
 
-                    searchHistory.push(weatherData);
+                    // searchHistory.push(weatherData);
+                    addSearchHistory(weatherData);
+                    // console.log(searchHistory);
 
-                    console.log(searchHistory);
-
-                    localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
+                    // localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
 
                     displayWeatherAPIData();
 
@@ -156,9 +157,32 @@ const displayWeatherAPIData = () => {
 
 const loadSearchHistory = () => {
     btnGroup.innerHTML = "";
+    let searchHistory = localStorage.getItem("searchHistory");
+    if (!searchHistory) {
+        searchHistory = [];
+    }
+    searchHistory = JSON.parse(searchHistory);
     searchHistory.forEach(data => {
         btnGroup.innerHTML += `<button type="button" class="btn btn-primary">${data.location}</button>`
     });
+}
+
+const addSearchHistory = (data) => {
+    let searchHistory = localStorage.getItem("searchHistory");
+    if (!searchHistory) {
+        searchHistory = [];
+    }
+    searchHistory = JSON.parse(searchHistory);
+    searchHistory.push(data);
+    localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
+
+    loadSearchHistory();
+}
+
+const clearSearchHistory = () => {
+    let searchHistory = [];
+    localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
+    loadSearchHistory();
 }
 
 
