@@ -18,7 +18,7 @@ A weather dashboard that will run in the browser and feature dynamically updated
 ![Example](./asset/img/sampleImg1.png)
 
 ## Deployment
-
+https://ruihang2017.github.io/weatherDashboard/
 
 ## License
 Please refer to the LICENSE in the repo.
