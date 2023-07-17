@@ -41,10 +41,22 @@ const getWeatherAPIFromSearch = (searchData) => {
     });
 }
 
+
 // add the event listener
 searchForm.addEventListener('submit', (event) => {
     event.preventDefault();
 
+    // on clear
+    // clear the button list and the searchHistory inside localstorage 
+    if (event.submitter.getAttribute("type") === "clear") {
+        searchHistory = [];
+        localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
+        loadSearchHistory();
+        return;
+    }
+
+    // on search
+    // fire the weather api search function
     const input = searchForm.querySelector('input[type="search"]');
     const searchValue = input.value;
 
@@ -65,14 +77,14 @@ const getWeatherAPI = (lat, lon) => {
                     const currentDate = new Date();
                     weatherData.location = data.city.name;
                     weatherData.currentWeather.date = `(${currentDate.getDate()}/${currentDate.getMonth()}/${currentDate.getFullYear()})`;
-                    console.log(weatherData.currentWeather.date);
+                    // console.log(weatherData.currentWeather.date);
                     weatherData.currentWeather.temp = `Temp: ${Math.floor(data.list[0].main.temp - 273.15)} &#8451;`;
                     weatherData.currentWeather.wind = `Wind: ${data.list[0].wind.speed} m/s;`;
                     weatherData.currentWeather.humid = `Humidity: ${data.list[0].main.humidity} %;`;
                     weatherData.currentWeather.icon = `http://openweathermap.org/img/wn/${data.list[0].weather[0].icon}.png`;
 
-                    console.log(data);
-                    console.log(data.list[0].weather[0].icon);
+                    // console.log(data);
+                    // console.log(data.list[0].weather[0].icon);
                     data.list.forEach(element => {
                         let date = new Date(element.dt * 1000)
                         let dateString = `${date.getDate()} - ${date.getMonth()}`;
@@ -96,10 +108,15 @@ const getWeatherAPI = (lat, lon) => {
                         }
 
                     });
-                    console.log(weatherData);
-                    displayWeatherAPIData();
+                    console.log(searchHistory);
+
                     searchHistory.push(weatherData);
+
+                    console.log(searchHistory);
+
                     localStorage.setItem("searchHistory", JSON.stringify(searchHistory));
+
+                    displayWeatherAPIData();
 
                 });
             } else {
@@ -132,10 +149,13 @@ const displayWeatherAPIData = () => {
             <div>${forecast.humid}</div>
             </div>`;
     })
+
+    loadSearchHistory();
 }
 
 
 const loadSearchHistory = () => {
+    btnGroup.innerHTML = "";
     searchHistory.forEach(data => {
         btnGroup.innerHTML += `<button type="button" class="btn btn-primary">${data.location}</button>`
     });
@@ -143,7 +163,6 @@ const loadSearchHistory = () => {
 
 
 //---------------- init -----------------
-
 let siteLocation = "";
 const init = () => {
 
